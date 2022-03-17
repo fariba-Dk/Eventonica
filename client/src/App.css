@@ -1,9 +1,12 @@
-*{
-  background-color:black;
-  color:azure;
+html{
+  background-color: white;
+  color: black;
+  background-image:url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScByMNu_8GBR0jMCA75QZmYMSLXU4xY7PMaQ&usqp=CAU');
+  background-repeat:no-repeat;
+
 }
-img{
-  src:'client/src/public/images/cal.png';
+img {
+  src: 'client/src/public/images/cal.png';
 }
 fieldset {
   border: none;

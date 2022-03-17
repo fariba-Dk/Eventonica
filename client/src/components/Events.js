@@ -179,4 +179,4 @@ export default Events;
 // name: '',
 // date: '',
 // description: '',
-*/ category: '',
+*/ 

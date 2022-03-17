@@ -1,25 +1,23 @@
-import calendar from '../public/calender-image.png';
+import calendar from './calendar.png';
 import './App.css';
-import Footer from './Components/Footer';
-import Users from './Components/Users';
-import Events from './Components/Events';
+import Footer from './components/Footer';
+import Users from './components/Users';
+import Events from './components/Events';
 import DeleteUser from './components/DeleteUser';
-import Header from './components/Header'
+import Header from './components/Header';
 
 function App() {
   return (
     <div className='App'>
       <header>
-        <img src={calendar} alt='Calendar image' />{' '}
+        <img src={calendar} alt='Calendar image' />
         <h1>Eventonica Calendar </h1>
       </header>
-      {/* main  */}
       <main>
         <div className='user-and-events'>
           <Users />
           <Events />
         </div>
-        {/* All EVENTS AND DATES  */}
         <div>
           <aside className='search-toolbar'>
             <div>
@@ -42,7 +40,6 @@ function App() {
               </form>
             </div>
           </aside>
-
         </div>
         <div>
           {' '}

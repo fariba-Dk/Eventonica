@@ -10,7 +10,7 @@ function App() {
     <div className='App'>
       <header>
         <img src={calendar} alt='Calendar'/>
-        <h2>PGA & LPGA Tournament Calendar of Events for 2022
+        <h2> 🏆 {' '}  PGA & LPGA - Tournament Calendar of Events - 2022 🏆
         </h2>
       </header>
 
@@ -53,7 +53,7 @@ function App() {
             <input type='submit' />{' '}
           </form>{' '}
         </div>
-<Users/>
+        <Users/>
 
 
         </main>

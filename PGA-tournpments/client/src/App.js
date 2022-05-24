@@ -1,64 +1,83 @@
-import calendar from './calendar.png';
-import './App.css';
-import Users from './components/Users';
-import Events from './components/Events';
-import Footer from './components/Footer';
+import React, { useState, useEffect } from 'react'
+import { CssBaseline, Grid } from '@material-ui/core';
+import Header from '../src/components/header/Header.js'
+import List from './components/courses/CourseList.js';
+import Map from '../src/components/map/Map.js';
+import { getGolfCoursesData} from '../src/api'
 
 
-function App() {
-  return (
-    <div className='App'>
-      <header>
-        <img src={calendar} alt='Calendar'/>
-        <h2> 🏆 {' '}  PGA & LPGA - Tournament Calendar of Events - 2022 🏆
-        </h2>
-      </header>
 
-      <main>
-        <div className='user-and-events'>
-          <aside className='search-toolbar'>
-          {' '}
-          <div>
-            {' '}
-            <h3>Find Events</h3>{' '}
-            <form id='search' action='#'>
-              {' '}
-              <fieldset>
-                {' '}
-                <label htmlFor='date-search'>Date</label>{' '}
-                <input type='text' id='date-search' placeholder='YYYY-MM-DD' />{' '}
-              </fieldset>{' '}
-              <fieldset>
-                {' '}
-                <label htmlFor='category-search'>Category</label>{' '}
-                <input type='text' id='category-search' />{' '}
-              </fieldset>
-              <input type='submit' value='Search' />{' '}
-            </form>{' '}
-          </div>{' '}
-        </aside>{' '}
+const App = () => {
 
-          <Events />
-        </div>
+  //to set coords on auto
+  const [ coords, setCoords ] = useState( {} );
+  const [ radius, setRadius ] = useState( '5' );
+  const [ type, setType ] = useState( 'courses' );
 
-        <div className="delete-users">
-          <h3>Delete Event</h3>{ ' ' }
-          <form id='delete-event' action='#'>
-            {' '}
-            <fieldset>
-              {' '}
-              <label>Event ID</label>{' '}
-              <input type='number' min='1' id='delete-event-id' />{' '}
-            </fieldset>{' '}
-            <input type='submit' />{' '}
-          </form>{' '}
-        </div>
-        <Users/>
+  // golf course hooks
+  const [ details, setDetails ] = useState( {} )
+  const [ courses, setCourses ] = useState( [] );
 
+  const [ autocomplete, setAutocomplete ] = useState( null );
+  const [ childClicked, setChildClicked ] = useState( null );
+  const [ isLoading, setIsLoading ] = useState( false );
 
-        </main>
-      <Footer />{' '}
-    </div>
+  //this sets the user's location RIGHT WHEN
+  useEffect( () => {
+    navigator.geolocation.getCurrentPosition( ( { coords: { latitude, longitude } } ) => {
+      setCoords( { lat: latitude, lng: longitude } );
+    } );
+  }, [] );
+
+  const onPlaceChanged = ( coords ) => {
+
+    setCoords( coords );
+    if ( coords.lat && coords.lng && radius ) {
+
+      setIsLoading( true )//display loading
+      getGolfCoursesData( radius, coords.lat, coords.lng )
+        .then( ( data ) => {
+
+          setCourses( data.courses )
+        } )
+        .catch( ( err ) =>
+          console.log( err ) )
+        .finally( () => {
+          setIsLoading( false );//once loaded it sets to false
+        }
+        )
+    }
+  }
+
+  const onLoad = ( autoC ) => setAutocomplete( autoC );
+
+ return (
+    <>
+      <CssBaseline />
+      <Header onPlaceChanged={onPlaceChanged} onLoad={onLoad} />
+      <Grid container spacing={3} style={{ width: '100%' }}>
+        <Grid item xs={12} md={4}>
+          <List
+            isLoading={isLoading}
+            childClicked={ childClicked }
+
+            courses={courses}
+            type={type}
+            setType={setType}
+          />
+        </Grid>
+        <Grid item xs={12} md={8} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Map
+            setChildClicked={setChildClicked}
+            setRadius={setRadius}
+            setCoords={setCoords}
+            coords={ coords }
+            courses={courses}
+          />
+        </Grid>
+      </Grid>
+    </>
   );
-}
+};
+
 export default App;
